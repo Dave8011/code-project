@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📂 Project File Explorer</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 1000px; margin: auto; }
+    h2 { margin-top: 2rem; color: #444; }
+    ul { padding-left: 1rem; }
+    li { list-style: none; margin: 5px 0; cursor: pointer; color: #0070f3; }
+    li:hover { text-decoration: underline; }
+    textarea { width: 100%; height: 400px; margin-top: 20px; font-family: monospace; }
+    button { padding: 8px 16px; margin-top: 10px; }
+    #filename { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>📁 Project File Browser</h1>
+  
+  <div id="fileExplorer"></div>
+  
+  <div id="editorSection">
+    <h2 id="filename">📝 Click a file to view/edit</h2>
+    <textarea id="editor" placeholder="File content will appear here..."></textarea><br>
+    <button onclick="alert('Saving not active - GitHub API or backend needed')">Save (Not Active)</button>
+  </div>
+
+  <script>
+    // Define subfolders and files manually (or generate dynamically later)
+    const folderStructure = {
+      "fba_planning": ["file1.txt", "plan_notes.css"],
+      "img_codes": ["img_check.html", "img_refresh.sh"],
+      "naturtint_site": ["naturtint_blog.html", "naturtint_faq.html", "style.css"],
+      "ptfs_site": ["table.css", "faq.html"],
+      "vitashop_site": ["shop_by_brand.css", "Untitled-1.js"]
+    };
+
+    const explorer = document.getElementById("fileExplorer");
+    const editor = document.getElementById("editor");
+    const filenameLabel = document.getElementById("filename");
+
+    Object.keys(folderStructure).forEach(folder => {
+      const section = document.createElement("div");
+      const heading = document.createElement("h2");
+      heading.textContent = `📂 ${folder}`;
+      section.appendChild(heading);
+
+      const list = document.createElement("ul");
+
+      folderStructure[folder].forEach(file => {
+        const li = document.createElement("li");
+        li.textContent = file;
+        li.onclick = () => {
+          const path = `${folder}/${file}`;
+          fetch(path)
+            .then(res => {
+              if (!res.ok) throw new Error("File not found");
+              return res.text();
+            })
+            .then(text => {
+              editor.value = text;
+              filenameLabel.textContent = `📝 Editing: ${path}`;
+            })
+            .catch(err => {
+              editor.value = "// Error loading file.";
+              filenameLabel.textContent = `❌ Could not open: ${path}`;
+            });
+        };
+        list.appendChild(li);
+      });
+
+      section.appendChild(list);
+      explorer.appendChild(section);
+    });
+  </script>
+</body>
+</html>

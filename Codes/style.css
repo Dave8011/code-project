@@ -1,22 +1,18 @@
 body {
   font-family: sans-serif;
-  padding: 20px;
-  background: #f2f2f2;
+  background: #111;
+  color: #eee;
+  padding: 2rem;
 }
-#folders {
-  margin-bottom: 20px;
-}
-.folder {
-  background: #fff;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin: 5px;
+#explorer div {
   cursor: pointer;
+  margin: 5px 0;
+  padding: 5px;
+  background: #222;
+  border: 1px solid #333;
 }
-.folder:hover {
-  background: #eef;
-}
-#editor {
+textarea {
   width: 100%;
   height: 300px;
+  margin-top: 1rem;
 }

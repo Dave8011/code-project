@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📂 Code Browser</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Code Viewer</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>📁 Code Project Explorer</h1>
-  <div id="explorer" class="explorer"></div>
-  <div id="editorSection" class="editor-section hidden">
-    <h2 id="filename">📝 Click a file to view/edit</h2>
-    <textarea id="editor" placeholder="File content..."></textarea><br>
-    <button onclick="alert('Saving requires GitHub API or backend')">Save (Not Active)</button>
+  <h1>📁 Code Explorer</h1>
+  <div id="folders"></div>
+  <div id="file-content" style="display: none;">
+    <h2 id="filename"></h2>
+    <textarea id="editor"></textarea>
+    <button id="saveBtn">💾 Save</button>
   </div>
 
   <script src="script.js"></script>

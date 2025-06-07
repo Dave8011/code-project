@@ -1,56 +1,89 @@
-// ✅ Define your folder structure
-const folders = {
-  "fba_planning": ["plan.css"],
-  "img_codes": ["check.html"],
-  "naturtint_site": ["index.html", "faq.css"],
-  "ptfs_site": ["table.css"],
-  "vitashop_site": ["script.js", "style.css"]
+const token = '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'; // Keep secret!
+const username = 'Dave8011';
+const repo = 'code-project';
+const basePath = 'Codes';
+
+const headers = {
+  Authorization: `token ${token}`,
+  Accept: 'application/vnd.github.v3+json'
 };
 
-const explorer = document.getElementById("explorer");
-const editor = document.getElementById("editor");
-const filenameLabel = document.getElementById("filename");
-const editorSection = document.getElementById("editorSection");
+const foldersDiv = document.getElementById('folders');
+const editor = document.getElementById('editor');
+const saveBtn = document.getElementById('saveBtn');
+const fileNameDisplay = document.getElementById('filename');
+let currentFileSHA = '';
+let currentFilePath = '';
 
-// Loop through folders
-Object.entries(folders).forEach(([folder, files]) => {
-  const folderDiv = document.createElement("div");
-  const folderLabel = document.createElement("div");
-  folderLabel.textContent = "📁 " + folder;
-  folderLabel.className = "folder";
+async function listFolders() {
+  const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${basePath}`, { headers });
+  const data = await res.json();
 
-  const fileList = document.createElement("ul");
-  fileList.className = "file-list";
+  data.forEach(item => {
+    if (item.type === 'dir') {
+      const div = document.createElement('div');
+      div.className = 'folder';
+      div.textContent = '📁 ' + item.name;
+      div.onclick = () => listFiles(item.path);
+      foldersDiv.appendChild(div);
+    }
+  });
+}
 
-  files.forEach(file => {
-    const li = document.createElement("li");
-    li.textContent = file;
-    li.className = "file";
-    li.onclick = () => {
-      const path = `${folder}/${file}`;
-      fetch(path)
-        .then(res => {
-          if (!res.ok) throw new Error("Not found");
-          return res.text();
-        })
-        .then(text => {
-          editor.value = text;
-          filenameLabel.textContent = `📝 Editing: ${path}`;
-          editorSection.classList.remove("hidden");
-        })
-        .catch(() => {
-          editor.value = "// Error loading file.";
-          filenameLabel.textContent = `❌ Could not open: ${path}`;
-        });
-    };
-    fileList.appendChild(li);
+async function listFiles(folderPath) {
+  foldersDiv.innerHTML = ''; // clear view
+  const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`, { headers });
+  const data = await res.json();
+
+  data.forEach(file => {
+    if (file.type === 'file') {
+      const div = document.createElement('div');
+      div.className = 'folder';
+      div.textContent = '📄 ' + file.name;
+      div.onclick = () => loadFile(file.path);
+      foldersDiv.appendChild(div);
+    }
   });
 
-  folderLabel.onclick = () => {
-    fileList.classList.toggle("active");
+  // back button
+  const back = document.createElement('div');
+  back.className = 'folder';
+  back.textContent = '⬅️ Back';
+  back.onclick = () => {
+    foldersDiv.innerHTML = '';
+    listFolders();
   };
+  foldersDiv.insertBefore(back, foldersDiv.firstChild);
+}
 
-  folderDiv.appendChild(folderLabel);
-  folderDiv.appendChild(fileList);
-  explorer.appendChild(folderDiv);
-});
+async function loadFile(filePath) {
+  const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${filePath}`, { headers });
+  const data = await res.json();
+  const content = atob(data.content);
+  editor.value = content;
+  currentFileSHA = data.sha;
+  currentFilePath = filePath;
+  fileNameDisplay.textContent = 'Editing: ' + filePath.split('/').pop();
+  document.getElementById('file-content').style.display = 'block';
+}
+
+saveBtn.onclick = async () => {
+  const content = btoa(editor.value);
+  const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${currentFilePath}`, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({
+      message: 'Updated via web editor',
+      content,
+      sha: currentFileSHA
+    })
+  });
+
+  if (res.ok) {
+    alert('✅ File saved!');
+  } else {
+    alert('❌ Save failed.');
+  }
+};
+
+listFolders();

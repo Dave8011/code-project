@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Code Project Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Code Explorer</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>📁 Code Project Viewer</h1>
   <div id="login">
+    <h2>Admin Login</h2>
     <input id="user" placeholder="Username" />
     <input id="pass" type="password" placeholder="Password" />
     <button onclick="adminLogin()">Login</button>
   </div>
-  <div id="explorer"></div>
-  <div id="editor" style="display:none;">
-    <textarea id="codeArea"></textarea>
-    <button onclick="saveFile()">💾 Save</button>
+
+  <div id="app" style="display:none;">
+    <h1>Welcome, Admin</h1>
+    <div id="file-tree"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,28 @@
+body {
+  font-family: sans-serif;
+  background: #111;
+  color: #eee;
+  padding: 40px;
+}
+
+input {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 250px;
+  border-radius: 5px;
+  border: 1px solid #444;
+}
+
+button {
+  background: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#file-tree {
+  margin-top: 20px;
+}

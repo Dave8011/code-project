@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Code Viewer</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Code Project Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>📁 Code Explorer</h1>
-  <div id="folders"></div>
-  <div id="file-content" style="display: none;">
-    <h2 id="filename"></h2>
-    <textarea id="editor"></textarea>
-    <button id="saveBtn">💾 Save</button>
+  <h1>📁 Code Project Viewer</h1>
+  <div id="login">
+    <input id="user" placeholder="Username" />
+    <input id="pass" type="password" placeholder="Password" />
+    <button onclick="adminLogin()">Login</button>
   </div>
-
+  <div id="explorer"></div>
+  <div id="editor" style="display:none;">
+    <textarea id="codeArea"></textarea>
+    <button onclick="saveFile()">💾 Save</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

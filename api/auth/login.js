@@ -1,5 +1,3 @@
-// api/auth/login.js
-
 export default function handler(req, res) {
   const { username, password } = req.query;
 
